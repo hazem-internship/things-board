@@ -50,6 +50,7 @@ spec:
             # modify the pom.xml
             echo "upgrading the pom to version $VERSION"
             mvn versions:set -DnewVersion=$VERSION
+            sleep 600s
             mvn clean install -DskipTests -Dlicense.skip=true
         volumes:
         - name: maven-settings
