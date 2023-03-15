@@ -13,16 +13,20 @@ spec:
         stepTemplate:
           env:
           - name: _JAVA_OPTIONS
-            value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
-              -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5
-              -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
-              -Xms10m -Xmx192m
+            value: -XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true
+              -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4
+              -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx192m
           - name: MAVEN_OPTS
-            value: -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=25 -Dmaven.wagon.http.retryHandler.count=3
-          image: uses:jenkins-x/jx3-pipeline-catalog/tasks/maven/release.yaml@versionStream
+            value: -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=25
+              -Dmaven.wagon.http.retryHandler.count=3
+          - name: HOME
+            value: /tekton/home
+          envFrom:
+          - secretRef:
+              name: jx-boot-job-env-vars
+              optional: true
           name: ""
           resources:
-            # override limits for all containers here
             limits: {}
           volumeMounts:
           - mountPath: /root/.m2/
@@ -31,22 +35,40 @@ spec:
             name: release-gpg
           workingDir: /workspace/source
         steps:
-        - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
-          name: ""
+        - env:
+          - name: GIT_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: tekton-git
+          - name: GIT_USER
+            valueFrom:
+              secretKeyRef:
+                key: username
+                name: tekton-git
+          image: ghcr.io/jenkins-x/jx-release-version:2.6.6
+          name: next-version
           resources: {}
-        - name: next-version
-          resources: {}
-        - name: jx-variables
+          script: |
+            #!/usr/bin/env sh
+            jx-release-version --tag > VERSION
+        - image: ghcr.io/jenkins-x/jx-boot:3.10.70
+          name: jx-variables
           resources:
-            # override requests for the pod here
+            # set requests for the pod here
             requests:
               cpu: 400m
               memory: 512Mi
-        - name: build-mvn-deploy
+          script: |
+            #!/usr/bin/env sh
+            jx gitops variables
+        - image: maven:3.6-openjdk-11
+          name: build-mvn-deploy
           resources: {}
           script: |
             #!/usr/bin/env bash
             source .jx/variables.sh
+
             # modify the pom.xml
             echo "upgrading the pom to version $VERSION"
             mvn versions:set -DnewVersion=$VERSION
