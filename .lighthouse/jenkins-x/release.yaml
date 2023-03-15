@@ -36,25 +36,6 @@ spec:
           - name: release-gpg
             persistentVolumeClaim:
               claimName: my-gpg-pvc 
-  volumeClaimTemplates:
-    - metadata:
-        name: my-maven-pvc
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 8Gi
-        storageClassName: nfs 
-    - metadata:
-        name: my-gpg-pvc
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
-        storageClassName: nfs 
         steps:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
