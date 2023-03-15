@@ -36,7 +36,7 @@ spec:
           - name: release-gpg
             persistentVolumeClaim:
               claimName: my-gpg-pvc 
- volumeClaimTemplates:
+  volumeClaimTemplates:
     - metadata:
         name: my-maven-pvc
       spec:
