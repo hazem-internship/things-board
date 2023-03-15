@@ -29,13 +29,6 @@ spec:
           - mountPath: /root/.gnupg
             name: release-gpg
           workingDir: /workspace/source
-          volumes:
-          - name: maven-settings
-            persistentVolumeClaim:
-            claimName: my-maven-pvc
-          - name: release-gpg
-            persistentVolumeClaim:
-              claimName: my-gpg-pvc 
         steps:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
@@ -61,10 +54,14 @@ spec:
         - name: maven-settings
           secret:
             secretName: jenkins-maven-settings
+          persistentVolumeClaim:
+          claimName: my-maven-pvc  
         - name: release-gpg
           secret:
             optional: true
             secretName: jenkins-release-gpg
+          persistentVolumeClaim:
+          claimName: my-gpg-pvc    
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 12h0m0s
