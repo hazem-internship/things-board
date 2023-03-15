@@ -49,7 +49,7 @@ spec:
             # modify the pom.xml
             echo "upgrading the pom to version $VERSION"
             mvn versions:set -DnewVersion=$VERSION
-            mvn clean install -DskipTests -Dlicense.skip=true -X
+            mvn clean install -DskipTests -Dlicense.skip=true -e
         volumes:
         - name: maven-settings
           persistentVolumeClaim:
