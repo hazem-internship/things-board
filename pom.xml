@@ -590,7 +590,6 @@
                     <configuration>
                         <compilerArgs>
                             <arg>-Xlint:deprecation</arg>
-                            <arg>-Xlint:removal</arg>
                             <arg>-Xlint:unchecked</arg>
                         </compilerArgs>
                         <annotationProcessorPaths>
