@@ -137,6 +137,7 @@
     </properties>
 
     <modules>
+        <module>ui-ngx</module>
         <module>transport</module>
         <module>netty-mqtt</module>
         <module>common</module>
