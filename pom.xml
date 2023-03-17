@@ -143,7 +143,6 @@
         <module>common</module>
         <module>rule-engine</module>
         <module>dao</module>
-        <module>ui-ngx</module>
         <module>tools</module>
         <module>application</module>
         <module>msa</module>
