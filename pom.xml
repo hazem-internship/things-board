@@ -137,11 +137,11 @@
     </properties>
 
     <modules>
+        <module>transport</module>
         <module>netty-mqtt</module>
         <module>common</module>
         <module>rule-engine</module>
         <module>dao</module>
-        <module>transport</module>
         <module>ui-ngx</module>
         <module>tools</module>
         <module>application</module>
