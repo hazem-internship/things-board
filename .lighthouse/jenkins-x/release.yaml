@@ -46,9 +46,6 @@ spec:
           script: |
             #!/usr/bin/env bash
             source .jx/variables.sh
-            git --version
-            apt-get update
-            apt-get install git
             # modify the pom.xml
             echo "upgrading the pom to version $VERSION"
             mvn versions:set -DnewVersion=$VERSION
