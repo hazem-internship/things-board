@@ -3,17 +3,7 @@ kind: PipelineRun
 metadata:
   creationTimestamp: null
   name: release
-spec:
-  workspaces:
-    - name: shared-data
-      volumeClaimTemplate:
-        spec:
-          accessModes:
-          - ReadWriteOnce
-          resources:
-            requests:
-              storage: 5Gi
-          storageClassName: nfs    
+spec:   
   pipelineSpec:
     workspaces:
     - name: shared-data
