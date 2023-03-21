@@ -75,8 +75,8 @@ spec:
     serviceAccountName: tekton-bot
     workspaceVolumes:
     - name: shared-data
-        persistentVolumeClaim:
-          claimName: my-pvc
-          readOnly: false
+      persistentVolumeClaim:
+        claimName: my-pvc
+        readOnly: false
   timeout: 12h0m0s
 status: {}
