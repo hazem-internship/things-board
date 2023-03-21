@@ -43,7 +43,7 @@ spec:
             name: maven-settings
           - mountPath: /root/.gnupg
             name: release-gpg
-          workingDir: /workspace/source/source
+          workingDir: /workspace/source
         workspaces:
           - name: source
             workspace: shared-data
