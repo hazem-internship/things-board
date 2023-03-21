@@ -7,6 +7,8 @@ spec:
   pipelineSpec:
     workspaces:
     - name: shared-data
+      persistentVolumeClaim:
+        claimName: pvc-93eef7f112 
     tasks:
     - name: from-build-pack
       workspaces:
