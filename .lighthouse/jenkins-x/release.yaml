@@ -7,8 +7,6 @@ spec:
   pipelineSpec:
     workspaces:
     - name: shared-data
-      persistentVolumeClaim:
-        claimName: pvc-93eef7f112 
     tasks:
     - name: from-build-pack
       workspaces:
@@ -68,7 +66,17 @@ spec:
           secret:
             optional: true
             secretName: jenkins-release-gpg   
-  podTemplate: {}
-  serviceAccountName: tekton-bot
+  podTemplate: 
+    volumes:
+    - name: my-pvc
+      persistentVolumeClaim:
+        claimName: my-pvc
+        readOnly: false
+    serviceAccountName: tekton-bot
+    workspaceVolumes:
+    - name: shared-data
+        persistentVolumeClaim:
+          claimName: my-pvc
+          readOnly: false
   timeout: 12h0m0s
 status: {}
