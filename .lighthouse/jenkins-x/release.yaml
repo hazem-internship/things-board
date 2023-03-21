@@ -43,7 +43,10 @@ spec:
             name: maven-settings
           - mountPath: /root/.gnupg
             name: release-gpg
-          workingDir: /workspace/source
+          workingDir: /workspace/source/source
+        workspaces:
+          - name: source
+            workspace: shared-data
         steps:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
