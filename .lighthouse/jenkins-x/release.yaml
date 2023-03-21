@@ -4,9 +4,25 @@ metadata:
   creationTimestamp: null
   name: release
 spec:
+  workspaces:
+    - name: shared-data
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
+          storageClassName: nfs    
   pipelineSpec:
+    workspaces:
+    - name: shared-data
+      optional: false
     tasks:
     - name: from-build-pack
+      workspaces:
+      - name: source
+        workspace: shared-data
       resources: {}
       taskSpec:
         metadata: {}
@@ -28,7 +44,7 @@ spec:
             name: maven-settings
           - mountPath: /root/.gnupg
             name: release-gpg
-          workingDir: /workspace/source
+          workingDir: /workspace/source/source
         steps:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
