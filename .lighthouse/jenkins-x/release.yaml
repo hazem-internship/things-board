@@ -3,22 +3,21 @@ kind: PipelineRun
 metadata:
   creationTimestamp: null
   name: release
-spec:  
+spec:
   workspaces:
     - name: shared-data
       volumeClaimTemplate:
-        metadata:
-          name: pipelinerun-vol
         spec:
           accessModes:
           - ReadWriteOnce
           resources:
             requests:
               storage: 5Gi
-          storageClassName: nfs 
+          storageClassName: nfs    
   pipelineSpec:
     workspaces:
     - name: shared-data
+      optional: false
     tasks:
     - name: from-build-pack
       workspaces:
@@ -46,12 +45,11 @@ spec:
           - mountPath: /root/.gnupg
             name: release-gpg
           workingDir: /workspace/source
-        workspaces:
-          - name: source
-            workspace: shared-data
         steps:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
+          resources: {}
+        - name: next-version
           resources: {}
         - name: jx-variables
           resources:
@@ -70,9 +68,13 @@ spec:
             mvn clean install -DskipTests -Dlicense.skip=true -e
         volumes:
         - name: maven-settings
+          persistentVolumeClaim:
+          claimName: my-maven-pvc
           secret:
             secretName: jenkins-maven-settings 
-        - name: release-gpg 
+        - name: release-gpg
+          persistentVolumeClaim:
+          claimName: my-gpg-pvc 
           secret:
             optional: true
             secretName: jenkins-release-gpg   
