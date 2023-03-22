@@ -8,7 +8,7 @@ spec:
     workspaces:
     - name: shared-data
       persistentVolumeClaim:
-        claimName: mypvc
+        claimName: my-pvc
     tasks:
     - name: from-build-pack
       workspaces:
