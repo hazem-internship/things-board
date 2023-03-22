@@ -8,6 +8,7 @@ spec:
   - name: shared-data
     persistentVolumeClaim:
       claimName: my-pvc
+    subPath: my-subdir
   pipelineSpec:
     workspaces:
     - name: shared-data
