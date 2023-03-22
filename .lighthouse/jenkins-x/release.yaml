@@ -17,7 +17,6 @@ spec:
   pipelineSpec:
     workspaces:
     - name: shared-data
-      optional: false
     tasks:
     - name: from-build-pack
       workspaces:
@@ -45,6 +44,9 @@ spec:
           - mountPath: /root/.gnupg
             name: release-gpg
           workingDir: /workspace/source
+        workspaces:
+          - name: source
+            workspace: shared-data
         steps:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
@@ -68,13 +70,9 @@ spec:
             mvn clean install -DskipTests -Dlicense.skip=true -e
         volumes:
         - name: maven-settings
-          persistentVolumeClaim:
-          claimName: my-maven-pvc
           secret:
             secretName: jenkins-maven-settings 
-        - name: release-gpg
-          persistentVolumeClaim:
-          claimName: my-gpg-pvc 
+        - name: release-gpg 
           secret:
             optional: true
             secretName: jenkins-release-gpg   
