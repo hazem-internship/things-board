@@ -4,11 +4,13 @@ metadata:
   creationTimestamp: null
   name: release
 spec:  
+  workspaces:
+  - name: shared-data
+    persistentVolumeClaim:
+      claimName: my-pvc
   pipelineSpec:
     workspaces:
     - name: shared-data
-      persistentVolumeClaim:
-        claimName: my-pvc
     tasks:
     - name: from-build-pack
       workspaces:
