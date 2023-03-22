@@ -5,10 +5,17 @@ metadata:
   name: release
 spec:  
   workspaces:
-  - name: shared-data
-    persistentVolumeClaim:
-      claimName: my-pvc
-    subPath: my-subdir
+    - name: shared-data
+      volumeClaimTemplate:
+        metadata:
+          name: pipelinerun-vol
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
+          storageClassName: nfs 
   pipelineSpec:
     workspaces:
     - name: shared-data
