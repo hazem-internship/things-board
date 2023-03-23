@@ -42,8 +42,6 @@ spec:
           - name: source
             workspace: shared-data
         steps:
-        - name: next-version
-          resources: {}
         - name: jx-variables
           resources:
             # override requests for the pod here
