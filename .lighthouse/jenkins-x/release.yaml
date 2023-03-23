@@ -42,19 +42,6 @@ spec:
           - name: source
             workspace: shared-data
         steps:
-        - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
-          name: ""
-          script: |
-            #!/bin/sh
-            export SUBDIR="source"
-            echo "git cloning url: $REPO_URL version $PULL_BASE_REF@$PULL_BASE_SHA to dir: $SUBDIR"
-            git config --global --add user.name ${GIT_AUTHOR_NAME:-jenkins-x-bot}
-            git config --global --add user.email ${GIT_AUTHOR_EMAIL:-jenkins-x@googlegroups.com}
-            git config --global credential.helper store
-            cd $SUBDIR
-            git pull
-            echo "checked out revision: $PULL_BASE_REF@$PULL_BASE_SHA to dir: $SUBDIR"
-          resources: {}
         - name: next-version
           resources: {}
         - name: jx-variables
