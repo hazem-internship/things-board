@@ -42,9 +42,29 @@ spec:
           - name: source
             workspace: shared-data
         steps:
-        - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
-          name: ""
+        - envFrom:
+          - secretRef:
+              name: jx-boot-job-env-vars
+              optional: true
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.27.0
+          name: git-clone
           resources: {}
+          script: |
+            #!/bin/sh
+            export SUBDIR="source"
+            echo "git cloning url: $REPO_URL version $PULL_BASE_REF@$PULL_BASE_SHA to dir: $SUBDIR"
+            git config --global --add user.name ${GIT_AUTHOR_NAME:-jenkins-x-bot}
+            git config --global --add user.email ${GIT_AUTHOR_EMAIL:-jenkins-x@googlegroups.com}
+            git config --global credential.helper store
+            git clone $REPO_URL $SUBDIR
+            cd $SUBDIR
+            git reset --hard $PULL_BASE_SHA
+            echo "checked out revision: $PULL_BASE_REF@$PULL_BASE_SHA to dir: $SUBDIR"
+          workingDir: /workspace
+        workspaces:
+        - description: The git repo will be cloned onto the volume backing this workspace
+          mountPath: /workspace
+          name: output
         - name: next-version
           resources: {}
         - name: jx-variables
